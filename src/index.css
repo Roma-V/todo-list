@@ -195,6 +195,9 @@ body {
 [class*="__lg"]:not(:last-child) {
   margin-bottom: 1rem;
 }
+.input__error {
+  color: #ca3c3c
+}
 @media screen and (min-width: 620px) {
   [class*="__lg"] {
     font-size: 2.4rem;
