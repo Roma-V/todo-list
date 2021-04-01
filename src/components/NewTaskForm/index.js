@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
-function Form({ onSubmit }) {
+import './Form.css';
+
+function NewTaskForm({ onSubmit }) {
     const [name, setName] = useState('');
     const [inputError, setInputError] = useState(null);
 
@@ -45,4 +47,4 @@ function Form({ onSubmit }) {
     );
 }
 
-export default Form;
+export default NewTaskForm;

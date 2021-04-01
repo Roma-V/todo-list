@@ -2,12 +2,20 @@ import React, { useState } from "react";
 import { nanoid } from "nanoid";
 
 import './App.css';
-import Form from './components/Form.js';
-import FilterButton from './components/FilterButton.js';
-import Todo from './components/Todo.js';
+import NewTaskForm from './components/NewTaskForm';
+import Filter from './components/Filter';
+import TodoList from './components/TodoList';
+
+const FILTER_MAP = {
+  All: () => true,
+  Active: task => !task.completed,
+  Completed: task => task.completed
+};
+const FILTER_NAMES = Object.keys(FILTER_MAP);
 
 function App(props) {
   const [tasks, setTasks] = useState(props.tasks);
+  const [filter, setFilter] = useState('All');
 
   function addTask(name) {
     const newTask = { 
@@ -17,59 +25,47 @@ function App(props) {
     setTasks([...tasks, newTask]);
   }
 
+
   function toggleTaskCompleted(id) {
-    const updatedTasks = tasks.map(task => 
-      id === task.id
-        ? {...task, completed: !task.completed}
-        : task
+    const updatedTasks = tasks.map(task =>
+        id === task.id
+            ? { ...task, completed: !task.completed }
+            : task
     );
     setTasks(updatedTasks);
   }
 
+  function editTask(id, newName) {
+      const editedTaskList = tasks.map(task =>
+          id === task.id
+              ? { ...task, name: newName }
+              : task
+      );
+      setTasks(editedTaskList);
+  }
+
   function deleteTask(id) {
-    const remainingTasks = tasks.filter(task => id !== task.id);
-    setTasks(remainingTasks);
+      const remainingTasks = tasks.filter(task => id !== task.id);
+      setTasks(remainingTasks);
   }
   
   return (
     <div className="todoapp stack-large">
       <h1>Manage your tasks</h1>
-      <Form onSubmit={addTask} />
-      <div className="filters btn-group stack-exception">
-        <FilterButton />
-        <button type="button" className="btn toggle-btn" aria-pressed="false">
-          <span className="visually-hidden">Show </span>
-          <span>Active</span>
-          <span className="visually-hidden"> tasks</span>
-        </button>
-        <button type="button" className="btn toggle-btn" aria-pressed="false">
-          <span className="visually-hidden">Show </span>
-          <span>Completed</span>
-          <span className="visually-hidden"> tasks</span>
-        </button>
-      </div>
-      <h2 id="list-heading">
-        {tasks.length} {tasks.length !== 1 ? 'tasks' : 'task'} remaining
-        <br></br>
-        {tasks.filter(task => !task.completed).length} incomplete
-      </h2>
-      <ul
-        className="todo-list stack-large stack-exception"
-        aria-labelledby="list-heading"
-      >
-        {
-          tasks.map(task => (
-            <Todo 
-              key={task.id}
-              id={task.id} 
-              name={task.name} 
-              completed={task.completed}
-              onComplete={toggleTaskCompleted}
-              onDelete={deleteTask}
-            />
-          ))
-        }
-      </ul>
+      <NewTaskForm onSubmit={addTask} />
+      <Filter
+        filterNames={FILTER_NAMES} 
+        currentFilter={filter}
+        setFilter={setFilter}
+      />
+      <TodoList
+        tasks={tasks}
+        setTasks={setTasks}
+        filterFunction={FILTER_MAP[filter]}
+        onTaskComplete={toggleTaskCompleted}
+        onTaskDelete={deleteTask}
+        onTaskEdit={editTask}
+      />
     </div>
   );
 }
