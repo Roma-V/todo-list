@@ -7,39 +7,37 @@ import './Header.css';
 
 function Header(props) {
     const [location, setLocation] = useState(null);
+    const [sunlight, setSunlight] = useState(null);
+
+    const now = new Date();
 
     useEffect(() => {
         getLocation()
-            .then(location => {
-                setLocation(location);
-            })
+            .then(location => setLocation(location))
     }, []);
 
     useEffect(() => {
-        getSunlightData()
-            .then(sunlight => {
-                getSunriseDateObject(sunlight.sunrise);
-            })
-    }, []);
+        if (!location) return;
 
-    function getTime() {
-        const time = new Date();
-        return time.toLocaleString();
-    }
-
-    function getSunriseDateObject(sunriseTime) {
-        console.log(sunriseTime);
-        const now = new Date();
-
-        const sunriseDate = new Date(now.toLocaleDateString() + ' ' + sunriseTime + ' UTC');
-        console.log(sunriseDate);
-    }
+        getSunlightData(location)
+            .then(sunlight => setSunlight(sunlight))
+    }, [location]);
 
     return (
         <header className="header">
             <h1>Manage your day</h1>
             {location && <p> Location: {location.city}, {location.country}</p>}
-            <p>Date/Time: {getTime()}</p>
+            <p>Date/Time: {now.toLocaleString()}</p>
+            <p>Sunrise at: {sunlight && sunlight.sunrise.toLocaleString()}</p>
+            {
+                sunlight 
+                && <p>Time since sinrise: {((now - sunlight.sunrise)/1000/60/60).toFixed(1)}H</p>
+            }
+            <p>Sunset at: {sunlight && sunlight.sunset.toLocaleString()}</p>
+            {
+                sunlight 
+                && <p>Time to sinset: {((sunlight.sunset - now)/1000/60/60).toFixed(1)}H</p>
+            }
         </header>
     );
 }

@@ -9,3 +9,6 @@ An idea: covert to a general day-management app:
 - show a schedule - put the tasks on a timeline
 - show meal recipe suggestions and fill in the schedule with meals (search for a healthy diet API)
 - suggest a physical activity (average daily time budget and probable time schedule - need a sports/active lifestyle API)
+
+TODO:
+Add midnight, midday calculation and adjust header color accordingly.

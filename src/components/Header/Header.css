@@ -1,7 +1,24 @@
 .header {
     /* height: 4em; */
     padding: 0 4rem 1rem;
-    background-color: rgb(152, 192, 243);
+    background: linear-gradient(#5799d6, #2a73c7);
+    color: white;
+}
+
+.dark-background {
+    background: linear-gradient(#131313, #424242);
+}
+.dark-medium-background {
+    background: linear-gradient(#082846, #152333);
+}
+.medium-background {
+    background: linear-gradient(#326ab4, #153861);
+}
+.medium-light-background {
+    background: linear-gradient(#5799d6, #2a73c7);
+}
+.light-background {
+    background: linear-gradient(#84b7e7, #8cb6e6);
 }
 
 .header > h1 {
@@ -11,7 +28,6 @@
     margin: 0;
     margin-bottom: 1rem;
     line-height: 2em;
-    color: rgb(14, 14, 14);
 }
 
 .header > p {

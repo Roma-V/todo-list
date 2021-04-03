@@ -10,15 +10,15 @@ const baseUrl = 'https://api.sunrise-sunset.org/json';
 
 /**
  * 
- * @returns {Promise} A Promise with retrieved data with unnecessary fields removed
+ * @returns {Promise} A Promise with retrieved data with unnecessary fields removed.
  */
-function getSunlightData() {
+function getSunlightData({ latitude, longitude }) {
     const request = axios.get(
         baseUrl,
         {
             params: {
-                lat: 12345,
-                lng: 123,
+                lat: latitude,
+                lng: longitude,
                 date: 'today',
             },
         });
@@ -30,13 +30,27 @@ function getSunlightData() {
 /**
  * 
  * @param {Object} data JSON received from API and parsed to an Object.
- * @returns {Object} Data Object with unnecessary fields removed
+ * @returns {Object} Data Object with unnecessary fields removed.
  */
 function parseSinlightData(data) {
     return {
-        sunrise: data.sunrise,
-        sunset: data.sunset,
+        sunrise: utcTimeToDateObject(data.sunrise),
+        sunset: utcTimeToDateObject(data.sunset),
+        // midnight: data.day_length,
+        // midday: 
     };
+}
+
+/**
+ * 
+ * @param {String} time String representation of time (HH:MM:SS (AM/PM)?).
+ * @returns {Date} Date object corresponding to the time provided today.
+ */
+function utcTimeToDateObject(time) {
+    const now = new Date();
+
+    const date = new Date(now.toISOString().split('T')[0] + ' ' + time + ' UTC');
+    return date;
 }
 
 export default getSunlightData;
