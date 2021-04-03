@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { nanoid } from "nanoid";
 
 import './App.css';
+import Header from './components/Header'
 import NewTaskForm from './components/NewTaskForm';
 import Filter from './components/Filter';
 import TodoList from './components/TodoList';
@@ -50,23 +51,25 @@ function App(props) {
   }
   
   return (
-    <div className="todoapp stack-large">
-      <h1>Manage your tasks</h1>
-      <NewTaskForm onSubmit={addTask} />
-      <Filter
-        filterNames={FILTER_NAMES} 
-        currentFilter={filter}
-        setFilter={setFilter}
-      />
-      <TodoList
-        tasks={tasks}
-        setTasks={setTasks}
-        filterFunction={FILTER_MAP[filter]}
-        onTaskComplete={toggleTaskCompleted}
-        onTaskDelete={deleteTask}
-        onTaskEdit={editTask}
-      />
-    </div>
+    <React.Fragment>
+      <Header />
+      <main className="todoapp stack-large">
+        <NewTaskForm onSubmit={addTask} />
+        <Filter
+          filterNames={FILTER_NAMES} 
+          currentFilter={filter}
+          setFilter={setFilter}
+        />
+        <TodoList
+          tasks={tasks}
+          setTasks={setTasks}
+          filterFunction={FILTER_MAP[filter]}
+          onTaskComplete={toggleTaskCompleted}
+          onTaskDelete={deleteTask}
+          onTaskEdit={editTask}
+        />
+      </main>
+    </React.Fragment>
   );
 }
 
