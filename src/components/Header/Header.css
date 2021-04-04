@@ -8,9 +8,9 @@
 .night {
     background: linear-gradient(#131313, #424242);
 }
-.dark-medium-background {
+/* .dark-medium-background {
     background: linear-gradient(#082846, #152333);
-}
+} */
 .dusk {
     background: linear-gradient(#326ab4, #153861);
 }

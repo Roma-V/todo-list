@@ -6,10 +6,11 @@
 
 import axios from 'axios';
 
+import { millisecondsToHours, dateToHours } from '../utils/timeUtils.js'
+
 const baseUrl = 'https://api.sunrise-sunset.org/json';
 
 /**
- * 
  * @returns {Promise} A Promise with retrieved data with unnecessary fields removed.
  */
 function getSunlightData({ latitude, longitude }) {
@@ -28,7 +29,6 @@ function getSunlightData({ latitude, longitude }) {
 };
 
 /**
- * 
  * @param {Object} data JSON received from API and parsed to an Object.
  * @returns {Object} Data Object with unnecessary fields removed.
  */
@@ -39,6 +39,10 @@ function parseSinlightData(data) {
     const midnight = midNight(sunrise, sunset);
     
     return {
+        night: dateToHours(sunrise) - millisecondsToHours(sunrise - midnight),
+        dawn: dateToHours(midday) - millisecondsToHours(midday - sunrise)/2,
+        day: dateToHours(sunset) + millisecondsToHours(sunrise - midnight)/2,
+        dusk: dateToHours(sunset) + millisecondsToHours(sunrise - midnight),
         sunrise,
         sunset,
         midnight,
@@ -49,7 +53,6 @@ function parseSinlightData(data) {
 }
 
 /**
- * 
  * @param {String} time String representation of time (HH:MM:SS (AM/PM)?).
  * @returns {Date} Date object corresponding to the time provided today.
  */
@@ -61,7 +64,6 @@ function utcTimeToDateObject(time) {
 }
 
 /**
- * 
  * @param {Date} sunrise Date object representing sunrise time.
  * @param {Date} sunset Date object representing sunset time.
  * @returns {Date} Date object representing median day time.
@@ -72,7 +74,6 @@ function midDay(sunrise, sunset) {
 }
 
 /**
- * 
  * @param {Date} sunrise Date object representing sunrise time.
  * @param {Date} sunset Date object representing sunset time.
  * @returns {Date} Date object representing median night time.
@@ -82,15 +83,6 @@ function midNight(sunrise, sunset) {
     previousSunset.setDate(sunset.getDate() - 1);
     const nightLength = sunrise - previousSunset;
     return new Date(sunrise.valueOf() - nightLength/2);
-}
-
-/**
- * 
- * @param {Int} milliseconds Time in milliseconds.
- * @returns {Float} Time in hours.
- */
-function millisecondsToHours(milliseconds) {
-    return (milliseconds/1000/60/60).toFixed(2)
 }
 
 export default getSunlightData;

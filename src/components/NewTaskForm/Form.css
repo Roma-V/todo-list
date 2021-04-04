@@ -1,3 +1,24 @@
+.input-group {
+    position: relative;
+}
+
+.invisible {
+    display: none;
+}
+
+.short {
+    width: 50%;
+}
+
+.flex-short {
+    display: inline-block;
+    width: 50%;
+}
+
 .input__error {
-    color: #ca3c3c
+    color: #ca3c3c;
+    position: absolute;
+    bottom: 0;
+    right: 1em;
+    text-align: right;
 }
