@@ -33,11 +33,18 @@ function getSunlightData({ latitude, longitude }) {
  * @returns {Object} Data Object with unnecessary fields removed.
  */
 function parseSinlightData(data) {
+    const sunrise = utcTimeToDateObject(data.sunrise);
+    const sunset = utcTimeToDateObject(data.sunset)
+    const midday = midDay(sunrise, sunset);
+    const midnight = midNight(sunrise, sunset);
+    
     return {
-        sunrise: utcTimeToDateObject(data.sunrise),
-        sunset: utcTimeToDateObject(data.sunset),
-        // midnight: data.day_length,
-        // midday: 
+        sunrise,
+        sunset,
+        midnight,
+        midday,
+        midnightToSunriseLength: millisecondsToHours(sunrise - midnight),
+        sunriseToMiddayLength: millisecondsToHours(midday - sunrise),
     };
 }
 
@@ -51,6 +58,39 @@ function utcTimeToDateObject(time) {
 
     const date = new Date(now.toISOString().split('T')[0] + ' ' + time + ' UTC');
     return date;
+}
+
+/**
+ * 
+ * @param {Date} sunrise Date object representing sunrise time.
+ * @param {Date} sunset Date object representing sunset time.
+ * @returns {Date} Date object representing median day time.
+ */
+function midDay(sunrise, sunset) {
+    const dayLength = sunset - sunrise;
+    return new Date(sunrise.valueOf() + dayLength/2);
+}
+
+/**
+ * 
+ * @param {Date} sunrise Date object representing sunrise time.
+ * @param {Date} sunset Date object representing sunset time.
+ * @returns {Date} Date object representing median night time.
+ */
+function midNight(sunrise, sunset) {
+    const previousSunset = new Date(sunset);
+    previousSunset.setDate(sunset.getDate() - 1);
+    const nightLength = sunrise - previousSunset;
+    return new Date(sunrise.valueOf() - nightLength/2);
+}
+
+/**
+ * 
+ * @param {Int} milliseconds Time in milliseconds.
+ * @returns {Float} Time in hours.
+ */
+function millisecondsToHours(milliseconds) {
+    return (milliseconds/1000/60/60).toFixed(2)
 }
 
 export default getSunlightData;

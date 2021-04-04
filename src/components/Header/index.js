@@ -10,6 +10,32 @@ function Header(props) {
     const [sunlight, setSunlight] = useState(null);
 
     const now = new Date();
+    let headerClassName = 'header'
+
+    // Compute background style based on daytime
+    if (now && sunlight) {
+        const hoursNow = hours(now);
+        let dayTime;
+
+        if (hoursNow < hours(sunlight.sunrise) - sunlight.midnightToSunriseLength/2) {
+            dayTime = 'night';
+        }
+        else if (hoursNow < hours(sunlight.midday) - sunlight.sunriseToMiddayLength/2) {
+            dayTime = 'dawn';
+        }
+        else if (hoursNow < hours(sunlight.sunset) + sunlight.midnightToSunriseLength/2) {
+            dayTime = 'day';
+        } else {
+            dayTime = 'dusk';
+        }
+        console.log(dayTime);
+
+        headerClassName += ' ' + dayTime;
+    }
+
+    function hours(date) {
+        return date.getHours() + date.getMinutes()/60;
+    }
 
     useEffect(() => {
         getLocation()
@@ -24,7 +50,7 @@ function Header(props) {
     }, [location]);
 
     return (
-        <header className="header">
+        <header className={headerClassName}>
             <h1>Manage your day</h1>
             {location && <p> Location: {location.city}, {location.country}</p>}
             <p>Date/Time: {now.toLocaleString()}</p>

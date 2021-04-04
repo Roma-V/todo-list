@@ -5,19 +5,19 @@
     color: white;
 }
 
-.dark-background {
+.night {
     background: linear-gradient(#131313, #424242);
 }
 .dark-medium-background {
     background: linear-gradient(#082846, #152333);
 }
-.medium-background {
+.dusk {
     background: linear-gradient(#326ab4, #153861);
 }
-.medium-light-background {
+.dawn {
     background: linear-gradient(#5799d6, #2a73c7);
 }
-.light-background {
+.day {
     background: linear-gradient(#84b7e7, #8cb6e6);
 }
 
