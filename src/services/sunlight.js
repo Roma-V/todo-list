@@ -30,7 +30,7 @@ function getSunlightData({ latitude, longitude }) {
 
 /**
  * @param {Object} data JSON received from API and parsed to an Object.
- * @returns {Object} Data Object with unnecessary fields removed.
+ * @returns {Object} Data Object with end times for part of a day.
  */
 function parseSinlightData(data) {
     const sunrise = utcTimeToDateObject(data.sunrise);
@@ -39,16 +39,10 @@ function parseSinlightData(data) {
     const midnight = midNight(sunrise, sunset);
     
     return {
-        night: dateToHours(sunrise) - millisecondsToHours(sunrise - midnight),
+        night: dateToHours(sunrise) - millisecondsToHours(sunrise - midnight)/2,
         dawn: dateToHours(midday) - millisecondsToHours(midday - sunrise)/2,
-        day: dateToHours(sunset) + millisecondsToHours(sunrise - midnight)/2,
-        dusk: dateToHours(sunset) + millisecondsToHours(sunrise - midnight),
-        sunrise,
-        sunset,
-        midnight,
-        midday,
-        midnightToSunriseLength: millisecondsToHours(sunrise - midnight),
-        sunriseToMiddayLength: millisecondsToHours(midday - sunrise),
+        day: dateToHours(sunset) - millisecondsToHours(midday - sunrise)/2,
+        dusk: dateToHours(sunset) + millisecondsToHours(sunrise - midnight)/2,
     };
 }
 

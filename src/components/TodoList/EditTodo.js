@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { conditionallyAddClass } from '../../utils/styles.js'
+
 import '../NewTaskForm/Form.css'
 
 function EditTodo({
@@ -19,7 +21,8 @@ function EditTodo({
     function handleSubmit(e) {
         e.preventDefault();
         if (!newName || newName === name) {
-            setInputError('A task name should be at least one character long')
+            setInputError('A task name should be at least one character long');
+            editFieldRef.current.focus();
             return;
         }
 
@@ -30,19 +33,19 @@ function EditTodo({
 
     return (
         <form className="stack-small" onSubmit={handleSubmit}>
-            <div className="form-group">
+            <div className="input-group">
                 <label className="todo-label" htmlFor={id}>
                     New name for {name}
                 </label>
                 <input
                     id={id}
-                    className="todo-text"
+                    className={conditionallyAddClass("input input__sm", inputError, "input__error")}
                     type="text"
                     value={newName}
                     onChange={handleChange}
                     ref={editFieldRef}
                 />
-                <p className="input__error">{inputError}</p>
+                <p className="input__error-message">{inputError}</p>
             </div>
             <div className="btn-group">
                 <button 

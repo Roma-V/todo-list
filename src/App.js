@@ -37,17 +37,24 @@ function App(props) {
   }
 
   function editTask(id, newName) {
-      const editedTaskList = tasks.map(task =>
-          id === task.id
-              ? { ...task, name: newName }
-              : task
-      );
-      setTasks(editedTaskList);
+    const editedTaskList = tasks.map(task =>
+        id === task.id
+            ? { ...task, name: newName }
+            : task
+    );
+    setTasks(editedTaskList);
   }
 
   function deleteTask(id) {
+    const task = tasks.find(task => id !== task.id);
+    if (!task) return;
+
+    const taskName = task && task.name;
+    const confirm = window.confirm(`This will delete ${taskName}. Proceed?`)
+    if (confirm) {
       const remainingTasks = tasks.filter(task => id !== task.id);
       setTasks(remainingTasks);
+    }
   }
   
   return (

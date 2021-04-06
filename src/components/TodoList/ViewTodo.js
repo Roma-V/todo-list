@@ -10,8 +10,8 @@ function ViewTodo({
     editButtonRef
 }) {
     return (
-        <div className="stack-small">
-            <div className="c-cb">
+        <div className="inline-small">
+            <div className="c-cb short">
                 <input
                     id={id}
                     type="checkbox"
@@ -22,7 +22,7 @@ function ViewTodo({
                     {name}
                 </label>
             </div>
-            <div className="btn-group">
+            <div className="btn-group short">
                 <button 
                     type="button" 
                     className="btn"

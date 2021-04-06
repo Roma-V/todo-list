@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+
+import usePrevious from '../../hooks/usePrevious.js'
+import { conditionallyAddClass } from '../../utils/styles.js'
 
 import './Form.css';
 
@@ -7,9 +10,18 @@ function NewTaskForm({ onSubmit }) {
     const [name, setName] = useState('');
     const [inputError, setInputError] = useState(null);
 
-    function conditionallyAddClass(mainClass, contition, additionalCladd) {
-        return contition ? mainClass + " " + additionalCladd : mainClass;
-    }
+    const inputRef = useRef(null);
+    const addButtonRef = useRef(null);
+    const wasEditing = usePrevious(isActive);
+
+    useEffect(() => {
+        if (!wasEditing && isActive) {
+            inputRef.current.focus();
+        }
+        if (wasEditing && !isActive) {
+            addButtonRef.current.focus();
+        }
+    }, [wasEditing, isActive]);
 
     function handleChange(e) {
         setName(e.target.value);
@@ -24,7 +36,8 @@ function NewTaskForm({ onSubmit }) {
         }
 
         if (name.length === 0) {
-            setInputError('A task name should be at least one character long')
+            setInputError('A task name should be at least one character long');
+            inputRef.current.focus();
             return;
         }
 
@@ -39,12 +52,7 @@ function NewTaskForm({ onSubmit }) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            {/* <h2 className="label-wrapper">
-                <label htmlFor="new-todo-input" className="label__lg">
-                    Need to add more?
-                </label>
-            </h2> */}
+        <form className="stack-small" onSubmit={handleSubmit}>
             <label 
                 htmlFor="new-todo-input" 
                 className={conditionallyAddClass("label__lg short", isActive, "invisible")}
@@ -55,14 +63,15 @@ function NewTaskForm({ onSubmit }) {
                 <input
                     type="text"
                     id="new-todo-input"
-                    className="input input__lg"
+                    className={conditionallyAddClass("input input__lg", inputError, "input__error")}
                     name="text"
                     placeholder="New task"
                     autoComplete="off"
                     value={name}
+                    ref={inputRef}
                     onChange={handleChange}
                 />
-                <p className="input__error">{inputError}</p>
+                <p className="input__error-message">{inputError}</p>
             </div>
             <div className={conditionallyAddClass("btn-group", !isActive, "flex-short")}>
                 {
@@ -76,7 +85,11 @@ function NewTaskForm({ onSubmit }) {
                     <span className="visually-hidden">creating new task</span>
                     </button>
                 }
-                <button type="submit" className="btn btn__primary btn__lg">
+                <button 
+                    type="submit" 
+                    className="btn btn__primary btn__lg"
+                    ref={addButtonRef}
+                >
                     Add
                 </button>
             </div>
