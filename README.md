@@ -8,7 +8,7 @@ Some features:
 [IP Geolocation API](http://ipwhois.app/json/)
 - fetch daytime data for the location from:
 ["sunrise-sunset.org" API](https://api.sunrise-sunset.org/json)
-- adjust visual background according based on time.
+- adjust visual background of the header according based on time.
 
 An idea: covert to a general day-management app:
 - show local time, sun and moon phase
