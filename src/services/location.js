@@ -6,7 +6,7 @@
 
 import axios from 'axios';
 
-const baseUrl = 'http://ipwhois.app/json/';
+const baseUrl = 'https://ipwhois.app/json/';
 
 /**
  * 
